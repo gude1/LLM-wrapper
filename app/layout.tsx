@@ -22,10 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable} antialiased`}>
         <SideBar />
         <Header />
-        <div className="mt-14 min-h-screen md:ml-64 ">{children}</div>
+        <div className="mt-28 md:ml-64">{children}</div>
       </body>
     </html>
   );
