@@ -20,6 +20,8 @@ const config: Config = {
       },
       colors: {
         border: "#202020",
+        "emerald-green": "#40AE54",
+        "emerald-green-opaque": "rgba(64, 174, 84, 0.16)",
         "medium-gray": "#797979",
         "charcoal-gray": "#282828",
         "dim-gray": "#666666",

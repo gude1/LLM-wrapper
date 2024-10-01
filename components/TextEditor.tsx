@@ -18,13 +18,16 @@ import Command from "@/public/icons/command.svg";
 import { Link, Plus, Quote, Globe } from "lucide-react";
 import CircularProgress from "@/components/CircularProgress";
 import CommandDialog from "@/components/CommandDialog";
+import WebScrappingProgressDialog from "./WebScrappingProgressDialog";
 
 interface TextEditorProps {
   className?: string;
 }
 
 export default function TextEditor({}: TextEditorProps) {
-  const [opeCommandDialog, setOpenCommandDialog] = useState(false);
+  const [openCommandDialog, setOpenCommandDialog] = useState(false);
+  const [openWebScrapperDialog, setOpenWebScrapperDialog] = useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -71,6 +74,7 @@ export default function TextEditor({}: TextEditorProps) {
             </Button>
             <Button
               variant={"ghost"}
+              onClick={() => setOpenWebScrapperDialog(true)}
               className="p-0 hover:bg-transparent hover:text-white mr-7 w-auto h-auto rounded-none flex items-center justify-center"
             >
               <Quote size={16} className="mr-2" />
@@ -107,8 +111,13 @@ export default function TextEditor({}: TextEditorProps) {
       </div>
 
       <CommandDialog
-        open={opeCommandDialog}
+        open={openCommandDialog}
         onOpenChange={setOpenCommandDialog}
+      />
+
+      <WebScrappingProgressDialog
+        open={openWebScrapperDialog}
+        onOpenChange={setOpenWebScrapperDialog}
       />
     </>
   );
