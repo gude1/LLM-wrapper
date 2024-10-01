@@ -9,7 +9,7 @@ import {
   CornerUpRight,
 } from "lucide-react";
 
-export default function Header() {
+const Header = () => {
   return (
     <>
       {/* Header One */}
@@ -114,4 +114,6 @@ export default function Header() {
       </div>
     </>
   );
-}
+};
+
+export default Header;

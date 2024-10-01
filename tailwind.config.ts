@@ -20,6 +20,8 @@ const config: Config = {
       },
       colors: {
         border: "#202020",
+        "medium-gray": "#797979",
+        "charcoal-gray": "#282828",
         "dim-gray": "#666666",
         "silver-gray": "#979797",
         white: "#E4E4E4",

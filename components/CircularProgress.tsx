@@ -1,15 +1,18 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface CircularProgressProps {
   size?: number;
   percentage?: number;
   strokeWidth?: number;
+  circleClassName?: string;
   className?: string;
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({
   size = 28,
   percentage = 0,
+  circleClassName,
   strokeWidth = 15,
   className = "",
 }) => {
@@ -48,7 +51,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="text-primary"
+          className={cn(`text-primary ${circleClassName}`)}
           strokeLinecap="round"
           style={{ transition: "stroke-dashoffset 0.35s" }}
         />
