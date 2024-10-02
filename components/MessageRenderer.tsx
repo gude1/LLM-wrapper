@@ -8,7 +8,7 @@ interface MessageProps {
   content?: string;
 }
 
-const MessageRenderer: React.FC<MessageProps> = ({ content }) => {
+const MessageRenderer: React.FC<MessageProps> = ({ content = "string" }) => {
   return (
     <div className="text-white max-w-full font-inter px-2 md:px-4 overflow-hidden">
       <ReactMarkdown
