@@ -7,15 +7,9 @@ import StarterKit from "@tiptap/starter-kit";
 import { Button } from "@/components/Button";
 import PaperPlane from "@/public/icons/paper-plane.svg";
 import User from "@/public/icons/user.svg";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/Dialog";
 import Command from "@/public/icons/command.svg";
 
-import { Link, Plus, Quote, Globe } from "lucide-react";
+import { Plus, Quote } from "lucide-react";
 import CircularProgress from "@/components/CircularProgress";
 import CommandDialog from "@/components/CommandDialog";
 import WebScrappingProgressDialog from "./WebScrappingProgressDialog";
@@ -52,7 +46,7 @@ export default function TextEditor({}: TextEditorProps) {
     <>
       <div className="w-full max-w-[60rem]">
         <div className="w-full flex items-center rounded-lg pr-[1.09375rem] text-white  border border-[#2D2D2D] overflow-hidden">
-          <EditorContent editor={editor} className="flex-[1]" />
+          <EditorContent editor={editor} className="flex-[1] max-h-64" />
           <span className="mr-3 text-[#747474]">⌘↵ Send</span>
           <Button
             variant={"ghost"}
