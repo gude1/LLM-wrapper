@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import { Textarea } from "@/components/Textarea";
 import { Label } from "@/components/Label";
 import Command from "@/public/icons/command.svg";
 
-import { Link, Plus, Quote, Globe } from "lucide-react";
+import { Link, Globe } from "lucide-react";
 
 interface CommandDialogProps {
   open?: boolean;

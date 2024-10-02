@@ -7,7 +7,7 @@ import TextEditor from "@/components/TextEditor";
 export default function Home() {
   return (
     <>
-      <main className="min-h-screen flex flex-col mb-36">
+      <main className="flex flex-col mb-36">
         <div className="flex flex-col w-[92%] max-w-[56.25rem] self-center">
           <ResponeChatMsgItem
             content="Hello friend"
@@ -18,8 +18,12 @@ export default function Home() {
           <SenderChatMsgItem />
         </div>
       </main>
-      <footer className="min-h-32 fixed z-40 bg-background px-5 bottom-0 left-0 right-0 md:ml-64 flex justify-center">
-        <TextEditor />
+      <footer className="min-h-32 mb-4 fixed z-40 bg-background px-5 bottom-0 left-0 right-0 md:ml-64 flex justify-center">
+        <TextEditor
+          onSubmit={(html) => {
+            // alert(html);
+          }}
+        />
       </footer>
     </>
   );
