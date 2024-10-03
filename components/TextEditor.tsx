@@ -80,7 +80,8 @@ export default function TextEditor({ className, onSubmit }: TextEditorProps) {
   const handleSubmit = () => {
     if (editor) {
       const content = editor.getHTML();
-      if (!content) {
+
+      if (!editor.getText()) {
         return;
       }
       editor.commands.clearContent();
@@ -165,7 +166,7 @@ export default function TextEditor({ className, onSubmit }: TextEditorProps) {
               <EditorContent
                 editor={editor}
                 className="pl-5 py-5"
-                // onKeyDown={handleKeyDown} // Add keydown event to trigger on Enter key
+                onKeyDown={handleKeyDown} // Add keydown event to trigger on Enter key
               />
             </div>
 

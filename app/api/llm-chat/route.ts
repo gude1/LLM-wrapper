@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const stream = inference.chatCompletionStream({
       model: process.env.HUGGINGFACE_API_MODEL,
       messages: [{ role: "user", content: message }],
-      max_tokens: 500,
+      max_tokens: 1000,
     });
 
     const readableStream = new ReadableStream({

@@ -10,9 +10,7 @@ interface ResponeChatMsgItemProps {
   id?: string;
 }
 
-export const ResponeChatMsgItem: React.FC<ResponeChatMsgItemProps> = ({
-  content,
-}) => {
+const ResponeChatMsgItem: React.FC<ResponeChatMsgItemProps> = ({ content }) => {
   return (
     <div className="flex flex-col w-full justify-end">
       <MessageRenderer content={content} />
@@ -33,3 +31,5 @@ export const ResponeChatMsgItem: React.FC<ResponeChatMsgItemProps> = ({
     </div>
   );
 };
+
+export default React.memo(ResponeChatMsgItem);
