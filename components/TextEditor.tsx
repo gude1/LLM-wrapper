@@ -80,6 +80,9 @@ export default function TextEditor({ className, onSubmit }: TextEditorProps) {
   const handleSubmit = () => {
     if (editor) {
       const content = editor.getHTML();
+      if (!content) {
+        return;
+      }
       editor.commands.clearContent();
       if (onSubmit) onSubmit(content); //if onSubmit is defined
     }
