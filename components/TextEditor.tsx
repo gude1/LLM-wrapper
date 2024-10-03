@@ -16,6 +16,7 @@ import {
   Italic,
   List,
   ListOrdered,
+  StopCircle,
   Heading1,
   Heading2,
   Code,
@@ -28,6 +29,8 @@ import { cn } from "@/lib/utils";
 
 interface TextEditorProps {
   className?: string;
+  loading?: boolean;
+  onCancel?: () => void;
   onSubmit?: (content: string) => void;
 }
 
@@ -51,7 +54,12 @@ const MenuButton = ({
   </Button>
 );
 
-export default function TextEditor({ className, onSubmit }: TextEditorProps) {
+export default function TextEditor({
+  className,
+  onSubmit,
+  loading = false,
+  onCancel,
+}: TextEditorProps) {
   const [openCommandDialog, setOpenCommandDialog] = useState(false);
   const [openWebScrapperDialog, setOpenWebScrapperDialog] = useState(false);
 
@@ -173,10 +181,10 @@ export default function TextEditor({ className, onSubmit }: TextEditorProps) {
             <div className="absolute right-0 top-0 h-full flex items-start pt-5 bg-[#121212] pr-3">
               <Button
                 variant={"ghost"}
-                className="w-9 h-9 p-0 bg-transparent hover:bg-transparent flex items-center justify-center"
-                onClick={handleSubmit} // Attach handleSubmit to send button
+                className="w-9 h-9 p-0 bg-transparent hover:text-white hover:bg-transparent flex items-center justify-center"
+                onClick={loading ? onCancel : handleSubmit} // Attach handleSubmit to send button
               >
-                <PaperPlane size={25} />
+                {loading ? <StopCircle size={30} /> : <PaperPlane size={25} />}
               </Button>
             </div>
           </div>

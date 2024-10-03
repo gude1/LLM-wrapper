@@ -112,7 +112,11 @@ export default function Home() {
         </div>
       </main>
       <footer className="pb-4 fixed z-40 bg-background px-5 bottom-0 left-0 right-0 md:ml-64 flex justify-center">
-        <TextEditor onSubmit={handleSubmit} />
+        <TextEditor
+          onSubmit={handleSubmit}
+          loading={isLoading}
+          onCancel={cancelStream}
+        />
       </footer>
       <div ref={messagesEndRef} />
     </>
