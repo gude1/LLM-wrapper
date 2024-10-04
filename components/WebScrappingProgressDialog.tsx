@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/Dialog";
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 import { Progress } from "@/components/Progress";
 
 interface WebScrappingProgressDialogProps {

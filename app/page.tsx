@@ -97,19 +97,6 @@ export default function Home() {
     }
   };
 
-  // const handleRetry = async (messageId: string) => {
-  //   const messageToRetry = messages.find((msg) => msg.id === messageId);
-  //   if (!messageToRetry) return;
-
-  //   try {
-  //     setCurrentStreamId(messageId);
-  //     await sendMessage(messageToRetry.content);
-  //   } catch (err) {
-  //     console.error("Retry error:", err);
-  //     alert("Failed to retry message. Please try again.");
-  //   }
-  // };
-
   return (
     <>
       <main className="flex flex-col mb-64">
