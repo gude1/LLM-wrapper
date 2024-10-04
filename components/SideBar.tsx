@@ -27,7 +27,7 @@ const Sidebar = () => {
     <div>
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 left-0 overflow-y-auto pb-5 z-40 h-full flex flex-col border-r border-border w-full md:w-64 bg-background text-white shadow-lg transition-transform duration-300 transform ${
+        className={`fixed top-0 left-0 overflow-y-auto pb-5 z-50 h-full flex flex-col border-r border-border w-full md:w-64 bg-background text-white shadow-lg transition-transform duration-300 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >

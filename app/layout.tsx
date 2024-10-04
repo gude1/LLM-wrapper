@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+    <html lang="en" className="no-scrollbar">
+      <body className={`${inter.variable} antialiased no-scrollbar`}>
         <SideBar />
         <Header />
         <div className="mt-28 md:ml-64">{children}</div>

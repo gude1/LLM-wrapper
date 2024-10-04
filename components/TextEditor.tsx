@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu, Editor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import StarterKit from "@tiptap/starter-kit";
@@ -75,7 +75,7 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       onSubmit,
       loading = false,
       onCancel,
-      limit = 618,
+      limit = 1000,
     }: TextEditorProps,
     ref
   ) => {
@@ -117,12 +117,10 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       },
     });
 
-    // Expose the editor instance to the parent
     useImperativeHandle(
       ref,
       () => {
         return {
-          // getEditor: () => editor,
           setEditorContent: (content: string) =>
             editor?.commands.setContent(content),
         };
@@ -130,15 +128,19 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       [editor]
     );
 
+    const getRemainingCharacters = (editor: Editor) => {
+      const current = editor.storage.characterCount.characters();
+      return limit - current;
+    };
+
     const handleContentChange = useCallback(async () => {
       if (editor) {
         const content = editor.getHTML();
 
-        // Check for include-url command
         const includeUrlRegex =
           /\[include-url:\s*\[([^\]]+)\]\s*max_execution_time:(\d+)\s*filter:(true|false)\s*store:(true|false)\]/g;
         let match;
-        const matches = []; // Array to hold all matches
+        const matches = [];
 
         // Find all matches in the content
         while ((match = includeUrlRegex.exec(content)) !== null) {
@@ -171,14 +173,30 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
               }
 
               const data = await response.json();
+              const availablespace = getRemainingCharacters(editor);
               // Replace the command with the fetched content
               const updatedContent = content.replace(match[0], data.content);
-              editor.commands.setContent(updatedContent);
+
+              if (updatedContent.length >= limit) {
+                toast.error(
+                  "content was truncated to acommodate character limit",
+                  {
+                    duration: 2000,
+                    cancel: true,
+                  }
+                );
+              }
+              editor?.commands?.setContent(
+                updatedContent.slice(0, availablespace)
+              );
               // Optionally, focus the editor after replacement
               editor.commands.focus();
             } catch (error) {
               console.error("Error scraping URL:", error);
-              toast.error("Failed to scrape the URL. Please try again.");
+              toast.error("Failed to scrape the URL. Please try again.", {
+                duration: 2000,
+                cancel: true,
+              });
             }
           }
 
@@ -187,6 +205,7 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
           setScrapeQueries([]);
         }
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor]);
 
     useEffect(() => {
@@ -231,14 +250,14 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
         editor?.commands.insertContent("<p><br /></p>"); // Insert a new paragraph or line break
         if (websearchval) {
           editor?.commands?.insertContent(
-            `[include-url: [https://www.google.com?search=${websearchval}] max_execution_time:300 filter:false store:true]`
+            `[include-url: [https://www.google.com?search=${websearchval}] max_execution_time:300 filter:true store:true]`
           );
           editor?.commands.insertContent("<p><br /></p>");
         }
 
         if (includeurl) {
           editor?.commands?.insertContent(
-            `[include-url: [${includeurl}] max_execution_time:300 filter:false store:true]`
+            `[include-url: [${includeurl}] max_execution_time:300 filter:true store:true]`
           );
           editor?.commands.insertContent("<p><br /></p>");
         }
@@ -422,7 +441,7 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
 
             <div className="flex items-center">
               <span className="text-[#797979] mr-3 font-normal leading-[0.983125rem] text-[0.8125rem]">
-                {editor.storage.characterCount.characters()}/{618}
+                {editor.storage.characterCount.characters()}/{limit}
               </span>
               <CircularProgress
                 size={22}
