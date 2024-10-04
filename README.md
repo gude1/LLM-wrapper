@@ -1,37 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LLM Wrapper
 
-## Getting Started
+LLM Wrapper is an LLM-based chat interface that supports real-time interaction, web scraping, and rich text editing. It allows users to communicate with a Large Language Model (LLM), edit and resend messages, and perform web scraping directly within a Tiptap-based text editor.
 
-First, run the development server:
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Tech Stack](#tech-stack)
+
+## Features
+
+- **Send Messages to LLM:** Users can interact with the LLM by sending messages and receiving real-time responses.
+- **Real-time Chat Stream Reading:** The chat interface supports streaming responses from the LLM, allowing users to view partial responses as they are generated.
+- **Cancel Chat Stream:** Users can cancel an ongoing chat stream request for better control over the conversation.
+- **Edit and Resend Prompts:** Chat prompts can be edited and resent, giving users flexibility to refine their inputs.
+- **Copy Chat Prompts and Responses:** Both chat prompts and responses from the LLM can be copied for easy reference and reuse.
+
+## Installation
+
+1. Clone the repository and install dependencies:
 
 ```bash
-npm run dev
-# or
+git clone https://github.com/gude1/LLM-wrapper
+cd LLM-wrapper
+# npm install
+yarn install
+# npm run dev
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Use the .env.example file as a template to create your own .env file:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+Copy code
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Obtain the necessary API keys and select an LLM model of your choice from [Hugging Face.](https://huggingface.co/microsoft/Phi-3.5-mini-instruct)
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# LLM-wrapper
+-**Client**: Next.js
