@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <>
       {/* Header One */}
-      <div className="h-14 fixed z-40 bg-background overflow-x-auto px-5 whitespace-nowrap left-0 right-0 flex justify-between items-center top-0 md:ml-64 border-b border-gray">
+      <div className="h-14 hidden md:flex fixed z-40 bg-background overflow-x-auto px-5 whitespace-nowrap left-0 right-0  justify-between items-center top-0 md:ml-64 border-b border-gray">
         <div />
         <div className="flex">
           <Button
@@ -55,7 +55,7 @@ const Header = () => {
         </div>
       </div>
       {/* Header Two */}
-      <div className="h-14 fixed flex z-40 bg-background items-center justify-between overflow-x-auto px-5 whitespace-nowrap left-0 right-0 top-14 md:ml-64 border-b border-gray">
+      <div className="h-14 fixed hidden md:flex z-40 bg-background items-center justify-between overflow-x-auto px-5 whitespace-nowrap left-0 right-0 top-14 md:ml-64 border-b border-gray">
         <Button
           variant={"ghost"}
           className="rounded-none font-inter font-semibold text-base leading-[1.21rem]"

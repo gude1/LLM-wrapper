@@ -220,9 +220,9 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
 
     const handleSubmit = () => {
       if (editor) {
-        const content = editor.getHTML();
+        const content = editor.getText();
 
-        if (!editor.getText()) {
+        if (!editor) {
           return;
         }
         editor.commands.clearContent();

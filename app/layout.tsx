@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased no-scrollbar`}>
         <SideBar />
         <Header />
-        <div className="mt-28 md:ml-64">{children}</div>
+        <div className="mt-10 md:mt-28 md:ml-64">{children}</div>
         <Toaster />
       </body>
     </html>
