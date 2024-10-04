@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
   const { url, filter, maxExecutionTime } = await req.json();

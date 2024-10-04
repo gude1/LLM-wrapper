@@ -7,7 +7,7 @@ type RequestBody = {
 
 const inference = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
   const body: RequestBody = await req.json();
