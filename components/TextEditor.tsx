@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useCallback,
+  useEffect,
+} from "react";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
+import CharacterCount from "@tiptap/extension-character-count";
 import StarterKit from "@tiptap/starter-kit";
 import { Button } from "@/components/Button";
 import PaperPlane from "@/public/icons/paper-plane.svg";
@@ -25,10 +32,12 @@ import {
 import CircularProgress from "@/components/CircularProgress";
 import CommandDialog from "@/components/CommandDialog";
 import WebScrappingProgressDialog from "./WebScrappingProgressDialog";
-import { cn } from "@/lib/utils";
+import { calculatePercentage, cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface TextEditorProps {
   className?: string;
+  limit?: number;
   loading?: boolean;
   onCancel?: () => void;
   onSubmit?: (content: string) => void;
@@ -61,11 +70,22 @@ const MenuButton = ({
 
 const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
   (
-    { className, onSubmit, loading = false, onCancel }: TextEditorProps,
+    {
+      className,
+      onSubmit,
+      loading = false,
+      onCancel,
+      limit = 618,
+    }: TextEditorProps,
     ref
   ) => {
     const [openCommandDialog, setOpenCommandDialog] = useState(false);
     const [openWebScrapperDialog, setOpenWebScrapperDialog] = useState(false);
+    const [webSearchTxt, setWebSearchTxt] = useState("");
+    const [includeUrlTxt, setIncludeUrlTxt] = useState("");
+    const [scrapeQueries, setScrapeQueries] = useState<Array<{ url: string }>>(
+      []
+    );
 
     const editor = useEditor({
       extensions: [
@@ -80,7 +100,15 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
           emptyEditorClass:
             "before:content-[attr(data-placeholder)] before:text-[#797979] before:float-left before:pointer-events-none before:h-0",
         }),
+        CharacterCount.configure({
+          limit,
+        }),
       ],
+      onUpdate(props) {
+        if (props.editor.getText() == "/") {
+          setOpenCommandDialog(true);
+        }
+      },
       editorProps: {
         attributes: {
           class:
@@ -102,6 +130,76 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       [editor]
     );
 
+    const handleContentChange = useCallback(async () => {
+      if (editor) {
+        const content = editor.getHTML();
+
+        // Check for include-url command
+        const includeUrlRegex =
+          /\[include-url:\s*\[([^\]]+)\]\s*max_execution_time:(\d+)\s*filter:(true|false)\s*store:(true|false)\]/g;
+        let match;
+        const matches = []; // Array to hold all matches
+
+        // Find all matches in the content
+        while ((match = includeUrlRegex.exec(content)) !== null) {
+          matches.push(match); // Store each match in the array
+        }
+
+        if (matches.length > 0) {
+          // Set the dialog to open when at least one command is detected
+          setOpenWebScrapperDialog(true);
+          console.info("matches", matches);
+
+          for (const match of matches) {
+            const url = match[1]; // Extract the URL
+            const maxExecutionTime = parseInt(match[2], 10);
+            const filter = match[3] === "true";
+            const store = match[4] === "true";
+
+            updateScrapeQueries(url);
+            try {
+              // Call the scraping API
+              const response = await fetch("/api/scrape", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ url, maxExecutionTime, filter }),
+              });
+
+              if (!response.ok) {
+                throw new Error("Failed to fetch content from the URL.");
+              }
+
+              const data = await response.json();
+              // Replace the command with the fetched content
+              const updatedContent = content.replace(match[0], data.content);
+              editor.commands.setContent(updatedContent);
+              // Optionally, focus the editor after replacement
+              editor.commands.focus();
+            } catch (error) {
+              console.error("Error scraping URL:", error);
+              toast.error("Failed to scrape the URL. Please try again.");
+            }
+          }
+
+          // Close the dialog after all scraping is done
+          setOpenWebScrapperDialog(false);
+          setScrapeQueries([]);
+        }
+      }
+    }, [editor]);
+
+    useEffect(() => {
+      // Listen for changes in the editor
+      const editorListener = editor?.on("update", handleContentChange);
+
+      return () => {
+        // Clean up the listener on unmount
+        editorListener?.off("update", handleContentChange);
+      };
+    }, [editor, handleContentChange]);
+
     const handleSubmit = () => {
       if (editor) {
         const content = editor.getHTML();
@@ -119,6 +217,50 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
         event.preventDefault(); // Prevent default behavior for Enter key
         handleSubmit();
       }
+    };
+
+    const onCommandDialogSubmit = () => {
+      try {
+        if (!webSearchTxt && !includeUrlTxt) {
+          return;
+        }
+        let websearchval = webSearchTxt;
+        let includeurl = includeUrlTxt;
+        setOpenCommandDialog(false);
+        setWebSearchTxt("");
+        setIncludeUrlTxt("");
+        editor?.commands.insertContent("<p><br /></p>"); // Insert a new paragraph or line break
+        if (websearchval) {
+          editor?.commands?.insertContent(
+            `[include-url: [https://www.google.com?search=${websearchval}] max_execution_time:300 filter:false store:true]`
+          );
+          editor?.commands.insertContent("<p><br /></p>");
+        }
+
+        if (includeurl) {
+          editor?.commands?.insertContent(
+            `[include-url: [${includeurl}] max_execution_time:300 filter:false store:true]`
+          );
+          editor?.commands.insertContent("<p><br /></p>");
+        }
+      } catch (error) {
+        toast.error("Something went wrong, please try again");
+      }
+    };
+
+    const updateScrapeQueries = (url: string) => {
+      setScrapeQueries((prevQueries) => {
+        const urlExists = prevQueries.some((query) => query.url === url);
+        if (!urlExists) {
+          return [
+            ...prevQueries,
+            {
+              url,
+            },
+          ];
+        }
+        return prevQueries;
+      });
     };
 
     if (!editor) {
@@ -280,20 +422,43 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
 
             <div className="flex items-center">
               <span className="text-[#797979] mr-3 font-normal leading-[0.983125rem] text-[0.8125rem]">
-                32/618
+                {editor.storage.characterCount.characters()}/{618}
               </span>
               <CircularProgress
                 size={22}
-                percentage={20}
+                percentage={
+                  calculatePercentage(
+                    editor.storage.characterCount.characters(),
+                    `${limit}`
+                  ) || undefined
+                }
                 circleClassName="stroke-white"
               />
             </div>
           </div>
         </div>
 
-        {openCommandDialog && <CommandDialog open={openCommandDialog} />}
+        {openCommandDialog && (
+          <CommandDialog
+            open={openCommandDialog}
+            websearchval={webSearchTxt}
+            onWebSearchValChange={(event) => {
+              setWebSearchTxt(event.target.value);
+            }}
+            includeurlval={includeUrlTxt}
+            onIncludeUrlValChange={(event) => {
+              setIncludeUrlTxt(event.target.value);
+            }}
+            onOpenChange={setOpenCommandDialog}
+            onSubmit={onCommandDialogSubmit}
+          />
+        )}
         {openWebScrapperDialog && (
-          <WebScrappingProgressDialog open={openWebScrapperDialog} />
+          <WebScrappingProgressDialog
+            queries={scrapeQueries}
+            open={openWebScrapperDialog}
+            onOpenChange={setOpenWebScrapperDialog}
+          />
         )}
       </>
     );

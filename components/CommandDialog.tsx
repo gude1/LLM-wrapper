@@ -14,11 +14,22 @@ import { Link, Globe } from "lucide-react";
 
 interface CommandDialogProps {
   open?: boolean;
+  websearchval?: string | number | readonly string[];
+  onWebSearchValChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  includeurlval?: string | number | readonly string[];
+  onIncludeUrlValChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  onSubmit?: () => void;
   onOpenChange?(open: boolean): void;
 }
+
 const CommandDialog: React.FC<CommandDialogProps> = ({
   open,
   onOpenChange,
+  websearchval,
+  onWebSearchValChange,
+  includeurlval,
+  onIncludeUrlValChange,
+  onSubmit,
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -39,6 +50,8 @@ const CommandDialog: React.FC<CommandDialogProps> = ({
                 </Label>
               </div>
               <Textarea
+                value={websearchval}
+                onChange={onWebSearchValChange}
                 className="mt-4 h-[40px] p-0 text-white focus-visible:ring-offset-0  border-none outline-none focus-visible:ring-0 rounded-none flex placeholder:text-medium-gray resize-none"
                 placeholder="Search Term"
               />
@@ -53,6 +66,7 @@ const CommandDialog: React.FC<CommandDialogProps> = ({
 
               <Button
                 variant="outline"
+                onClick={onSubmit}
                 className="bg-[#333333] h-[1.875rem] text-white border-none rounded-lg ont-inter font-medium text-xs leading-[1.4rem]"
               >
                 Insert
@@ -69,6 +83,8 @@ const CommandDialog: React.FC<CommandDialogProps> = ({
                 </Label>
               </div>
               <Textarea
+                value={includeurlval}
+                onChange={onIncludeUrlValChange}
                 className="mt-4 h-[40px] p-0 text-white focus-visible:ring-offset-0  border-none outline-none focus-visible:ring-0 rounded-none flex placeholder:text-medium-gray resize-none"
                 placeholder="Enter URL"
               />
@@ -83,6 +99,7 @@ const CommandDialog: React.FC<CommandDialogProps> = ({
 
               <Button
                 variant="outline"
+                onClick={onSubmit}
                 className="bg-[#333333] h-[1.875rem] text-white border-none rounded-lg ont-inter font-medium text-xs leading-[1.4rem]"
               >
                 Insert

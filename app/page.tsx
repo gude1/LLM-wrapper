@@ -93,7 +93,7 @@ export default function Home() {
   const onChatCopyClick = async (content: string) => {
     const result = await copyToClipBoard(content);
     if (result) {
-      toast("Content copied!");
+      toast.success("Content copied!");
     }
   };
 

@@ -18,3 +18,12 @@ export async function copyToClipBoard(text: string) {
     return false;
   }
 }
+
+export function calculatePercentage(value1: string, value2: string) {
+  try {
+    if (!value1 || !value2) return null;
+    return (parseFloat(value1) / parseFloat(value2)) * 100;
+  } catch (err) {
+    return null;
+  }
+}
