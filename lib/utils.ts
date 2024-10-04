@@ -24,6 +24,7 @@ export function calculatePercentage(value1: string, value2: string) {
     if (!value1 || !value2) return null;
     return (parseFloat(value1) / parseFloat(value2)) * 100;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }

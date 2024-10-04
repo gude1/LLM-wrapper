@@ -23,7 +23,7 @@ const WebScrappingProgressDialog: React.FC<WebScrappingProgressDialogProps> = ({
     if (!queries) return null;
     return queries.map((item) => {
       return (
-        <div className="px-6">
+        <div className="px-6" key={item.url}>
           <div className="flex h-[3.6875rem] justify-between">
             <div className="flex items-center">
               <div className="flex justify-center mr-4 bg-emerald-green-opaque items-center w-6 h-6 rounded-full">

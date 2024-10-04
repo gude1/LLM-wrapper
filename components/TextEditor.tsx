@@ -154,7 +154,6 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
             const url = match[1]; // Extract the URL
             const maxExecutionTime = parseInt(match[2], 10);
             const filter = match[3] === "true";
-            const store = match[4] === "true";
 
             updateScrapeQueries(url);
             try {
@@ -224,8 +223,8 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
         if (!webSearchTxt && !includeUrlTxt) {
           return;
         }
-        let websearchval = webSearchTxt;
-        let includeurl = includeUrlTxt;
+        const websearchval = webSearchTxt;
+        const includeurl = includeUrlTxt;
         setOpenCommandDialog(false);
         setWebSearchTxt("");
         setIncludeUrlTxt("");
@@ -243,7 +242,8 @@ const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
           );
           editor?.commands.insertContent("<p><br /></p>");
         }
-      } catch (error) {
+      } catch (err) {
+        console.log(err);
         toast.error("Something went wrong, please try again");
       }
     };
